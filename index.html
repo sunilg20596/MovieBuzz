@@ -1,0 +1,232 @@
+<html>
+	<head>
+		<title>MovieBuzz</title>
+		<link rel="stylesheet" href="Style.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">	
+
+		<!--Ajax Code for Discription from omdbapi on click of Movie name in card -->
+		<script type="text/javascript">
+			function getReview(mname){
+				var xmlh = new XMLHttpRequest();
+				xmlh.onreadystatechange = function(){ 
+					if(this.readyState == 4 && this.status == 200)
+					{
+							var movie = JSON.parse(xmlh.responseText);
+							alert(movie.Plot);
+					}
+				}
+				xmlh.open("GET","http://www.omdbapi.com/?apikey=e0620bd4&t="+mname,true);
+				xmlh.send();				
+			}
+		</script>
+
+		
+		
+	</head>
+	<body>
+
+		<!--Header navbar -->
+		<div class="container-fluid fixed-top" id="topnav">
+			<div class="row">
+				<div class="col-lg-2">
+					<nav class="navbar" style="width:200px;margin-left:20px">
+						<a id="icon" href="#">MovieBuzz</a>
+					</nav>
+				</div>
+				<div class="col-lg-8">
+					 <div class="form-group " >
+						<input type="text" onkeyup="getanswer(document.getElementById('searchbar').value)" onkeydown="getanswer(document.getElementById('searchbar').value)" id="searchbar" class="form-control" placeholder="Search">
+						<span id="searchicon"><i class="fa fa-search"></i></span>
+					 </div>
+				</div>
+				<div id="items" class="row ">
+					<span style="margin-right: 50px;" id="Aboutus">About-Us</span>
+					<span id="Login">Login</span>
+				</div> 
+			</div>
+		</div>
+		
+		<!---Body of slider-->
+		<div class="container-fluid" id="slider">
+			<div id="demo" class="carousel slide" data-ride="carousel">
+			<!-- Indicators -->
+				<ul class="carousel-indicators">
+					<li data-target="#demo" data-slide-to="0" class="active"></li>
+					<li data-target="#demo" data-slide-to="1"></li>
+					<li data-target="#demo" data-slide-to="2"></li>
+					<li data-target="#demo" data-slide-to="3"></li>
+				</ul>
+
+				<!-- The slideshow -->
+				<div id="sliderimg" class="carousel-inner">
+					<div class="carousel-item active">
+						<img src="slider1.jpeg"  width="100%" height="340">
+					</div>
+					<div class="carousel-item">
+						<img src="slider2.jpeg"  width="100%" height="340">
+					</div>
+					<div class="carousel-item">
+						<img src="slider3.jpg"  width="100%" height="340">
+					</div>
+					<div class="carousel-item">
+						<img src="slider4.jpg"  width="100%" height="340">
+					</div>
+				</div>
+
+				<!-- Left and right controls -->
+				<a class="carousel-control-prev" href="#demo" data-slide="prev">
+					<span class="carousel-control-prev-icon"></span>
+				</a>
+				<a class="carousel-control-next" href="#demo" data-slide="next">
+					<span class="carousel-control-next-icon"></span>
+				</a>
+			</div>		
+		</div>
+		
+
+
+		
+
+
+
+		<!--Under slider text -->
+		<div id="moviedetail">
+			
+		
+		<div class="container-fluid" id="list">
+			<span id="movielist">Add Movies</span>
+
+				  <!-- Add movie content-->
+				 <div id="addMoviecontainer">
+					<div>
+						<div class="form-group" style="width: 400px;">
+							<label for="Movie_Name">Movie Name</label>
+							<input type="text" v-model="mname" class="form-control">
+						</div>
+						<div class="form-group" style="width: 400px;">
+							<label for="Movie_Poster">Movie Poster</label>
+							<input type="text" v-model="mposter" class="form-control">
+						</div>
+						<button style="width: 400px;" type="button" id="addSubmit" v-on:click="addMovie" class="btn btn-info" >
+							Add Movie
+						</button>
+					</div>
+					</div>
+		</div>	
+				
+
+
+		<div class="container-fluid" id="list">
+			<span id="movielist">List of Movies</span>
+			
+		
+	
+		<!-- add icon modal -->
+		<div class="container" id="MovieCard">
+			
+			  
+			<!--Card showing movies -->  
+			<div class="row">
+				<div class="col-lg-3"   style="margin:20px 0px;max-height:380px;overflow:hidden" v-for="movie in mdetail">
+					<div class="card" >
+						<img class="card-img-top" v-bind:src="movie.mposter" alt="Card image" style="width:100%;height:300px">
+						<div class="card-body">
+							<center>
+								<input type="submit" v-bind:value="movie.mname" onclick="getReview(this.value)" data-toggle="modal" data-target="#moviedetails">
+								
+							</center>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			</div>
+			
+			<!--- Movie details Script-->
+			<script type="text/javascript">
+				var movies = new Vue({
+					el:"#moviedetail",
+					data:{
+						mname:'',
+						mposter:'',
+						mdetail:[
+							{
+								mname:'Avengers: Endgame ',
+								mposter:'https://images-na.ssl-images-amazon.com/images/I/91e9898R7QL._RI_.jpg'
+							},
+							{
+								mname:'Shutter Island',
+								mposter:'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS93BIInWhD9_rzD2392tlqNV3MprG0_K7rLbGVWphiFJp3anf4'
+							},
+							{
+								mname:'The Pursuit of Happyness',
+								mposter:'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTWbSBpUAUHNvKrZn2EpEAQAfwbMutX26lByRCJosM6K6ug4Swc'
+							},
+							{
+								mname:'The Wolf of Wall Street',
+								mposter:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2R_HuoCogDkrQSwH6hS71G84IcpBqPYwCMGTYY_3R8GKraea-'
+							},
+							{
+								mname:'The Social Network',
+								mposter:'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTj268E01VcjLW3fNrO2z10WpXs7WMeciAB9wYSOA2DI-le_NQH'
+							},
+							{
+								mname:'Steve Jobs',
+								mposter:'https://images-na.ssl-images-amazon.com/images/I/812yZVfI-lL._RI_.jpg'
+							}
+						]
+					},
+					methods:{
+						addMovie(){
+							this.mdetail.push({
+								mname:this.mname,
+								mposter:this.mposter
+							});
+							alert("Movie added Succesfully..");
+
+							this.mname='';
+							this.mposter='';
+						}
+					}
+				}); 
+			</script>			
+			
+		</div>
+		</div>
+		<!-- Footer-->
+		<div class="container-fluid" id="footer">
+			<div class="row" style="margin-left:420px">
+				<span id="social"> <i class="fa fa-facebook-square fa-lg"></i></span>
+				<span id="social"> <i class="fa fa-twitter-square fa-lg"></i></span>
+				<span id="social"> <i class="fa fa-youtube-play fa-lg"></i></span>
+				<span id="social"> <i class="fa fa-instagram fa-lg"></i></span>
+			</div>
+			<div class="row" style="margin-left:370px;margin-top:20px;">
+				<span id="ftext">Terms & Condition</span>
+				<span id="ftext">Privacy Policy</span>
+				<span id="ftext">Terms of Use</span>
+			</div>
+			<div class="row" style="margin-left:430px;font-size:15px;margin-top:20px;">
+				<span id="ftext">&#169; 2020 By MovieBuzz.com</span>
+			</div>
+			
+		</div>
+		
+	</body>
+<html>
+
+
+
+
+
+
+
+
+
+
